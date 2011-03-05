@@ -24,13 +24,20 @@ import Data.Char (isAscii)
 import Data.String (IsString (..))
 import Data.Data (Data)
 import Data.Typeable (Typeable)
+import Data.Monoid (Monoid)
 import Data.Text (Text)
 import Data.CaseInsensitive (FoldCase)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 
 newtype Ascii = Ascii ByteString
-    deriving (Show, Eq, Read, Ord, Data, Typeable, IsString, FoldCase)
+    deriving ( Show, Read
+             , Eq, Ord
+             , Data, Typeable
+             , Monoid
+             , IsString
+             , FoldCase
+             )
 
 fromByteString :: ByteString -> Maybe Ascii
 fromByteString bs
