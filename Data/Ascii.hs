@@ -3,6 +3,7 @@ module Data.Ascii
     ( -- * Datatypes
       Ascii
     , CIAscii
+    , AsciiBuilder
       -- * Construction
       -- ** Safe
     , fromByteString
@@ -20,6 +21,9 @@ module Data.Ascii
     , toCIAscii
     , fromCIAscii
     , ciToByteString
+      -- * Builder
+    , toAsciiBuilder
+    , fromAsciiBuilder
     ) where
 
 import Data.ByteString (ByteString)
@@ -32,6 +36,7 @@ import Data.Typeable (Typeable)
 import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
+import qualified Blaze.ByteString.Builder as Blaze
 
 newtype Ascii = Ascii ByteString
     deriving (Show, Eq, Read, Ord, Data, Typeable, IsString)
@@ -95,3 +100,11 @@ toText (Ascii bs) = TE.decodeASCII bs
 
 ciToByteString :: CIAscii -> ByteString
 ciToByteString = ciOriginal
+
+toAsciiBuilder :: Ascii -> AsciiBuilder
+toAsciiBuilder (Ascii bs) = AsciiBuilder $ Blaze.fromByteString bs
+
+fromAsciiBuilder :: AsciiBuilder -> Ascii
+fromAsciiBuilder (AsciiBuilder b) = Ascii $ Blaze.toByteString b
+
+newtype AsciiBuilder = AsciiBuilder (Blaze.Builder)
