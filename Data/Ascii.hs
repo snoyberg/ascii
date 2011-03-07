@@ -24,6 +24,8 @@ module Data.Ascii
       -- * Builder
     , toAsciiBuilder
     , fromAsciiBuilder
+    , unsafeFromBuilder
+    , toBuilder
     ) where
 
 import Data.ByteString (ByteString)
@@ -37,6 +39,7 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 import qualified Blaze.ByteString.Builder as Blaze
+import Data.Monoid (Monoid)
 
 newtype Ascii = Ascii ByteString
     deriving (Show, Eq, Read, Ord, Data, Typeable, IsString)
@@ -108,3 +111,10 @@ fromAsciiBuilder :: AsciiBuilder -> Ascii
 fromAsciiBuilder (AsciiBuilder b) = Ascii $ Blaze.toByteString b
 
 newtype AsciiBuilder = AsciiBuilder (Blaze.Builder)
+    deriving Monoid
+
+unsafeFromBuilder :: Blaze.Builder -> AsciiBuilder
+unsafeFromBuilder = AsciiBuilder
+
+toBuilder :: AsciiBuilder -> Blaze.Builder
+toBuilder (AsciiBuilder b) = b
