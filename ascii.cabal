@@ -1,5 +1,5 @@
 Name:                ascii
-Version:             0.0.1.1
+Version:             0.0.2
 Synopsis:            Type-safe, bytestring-based ASCII values.
 License:             BSD3
 License-file:        LICENSE
@@ -12,8 +12,9 @@ Cabal-version:       >=1.2
 
 Library
   Exposed-modules:     Data.Ascii
-  Build-depends:       base            >= 4             && < 5
-                     , bytestring      >= 0.9           && < 0.10
-                     , text            >= 0.11          && < 0.12
-                     , blaze-builder   >= 0.2.1.4       && < 0.3
+  Build-depends:       base             >= 4             && < 5
+                     , bytestring       >= 0.9           && < 0.10
+                     , text             >= 0.11          && < 0.12
+                     , blaze-builder    >= 0.2.1.4       && < 0.3
+                     , case-insensitive >= 0.2           && < 0.3
   Ghc-options:         -Wall

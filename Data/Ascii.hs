@@ -31,7 +31,7 @@ module Data.Ascii
 import Data.ByteString (ByteString)
 import qualified Data.ByteString as S
 import qualified Data.ByteString.Char8 as S8
-import Data.Char (toLower, isAscii)
+import Data.Char (isAscii)
 import Data.String (IsString (..))
 import Data.Data (Data)
 import Data.Typeable (Typeable)
@@ -40,26 +40,12 @@ import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 import qualified Blaze.ByteString.Builder as Blaze
 import Data.Monoid (Monoid)
+import Data.CaseInsensitive (FoldCase, CI, mk, original)
 
 newtype Ascii = Ascii ByteString
-    deriving (Show, Eq, Read, Ord, Data, Typeable, IsString)
+    deriving (Show, Eq, Read, Ord, Data, Typeable, IsString, FoldCase, Monoid)
 
-data CIAscii = CIAscii
-    { ciOriginal :: !ByteString
-    , ciLowerCase :: !ByteString
-    }
-    deriving (Data, Typeable)
-
-instance Show CIAscii where
-    show = show . ciOriginal
-instance Read CIAscii where
-    readsPrec i = map (\(x, y) -> (toCIAscii x, y)) . readsPrec i
-instance Eq CIAscii where
-    x == y = ciLowerCase x == ciLowerCase y
-instance Ord CIAscii where
-    x <= y = ciLowerCase x <= ciLowerCase y
-instance IsString CIAscii where
-    fromString = toCIAscii . unsafeFromString
+type CIAscii = CI Ascii
 
 fromByteString :: ByteString -> Maybe Ascii
 fromByteString bs
@@ -87,10 +73,10 @@ unsafeFromText :: Text -> Ascii
 unsafeFromText = Ascii . TE.encodeUtf8
 
 toCIAscii :: Ascii -> CIAscii
-toCIAscii (Ascii bs) = CIAscii bs $ S8.map toLower bs
+toCIAscii = mk
 
 fromCIAscii :: CIAscii -> Ascii
-fromCIAscii = Ascii . ciOriginal
+fromCIAscii = original
 
 toByteString :: Ascii -> ByteString
 toByteString (Ascii bs) = bs
@@ -102,7 +88,7 @@ toText :: Ascii -> Text
 toText (Ascii bs) = TE.decodeASCII bs
 
 ciToByteString :: CIAscii -> ByteString
-ciToByteString = ciOriginal
+ciToByteString = toByteString . original
 
 toAsciiBuilder :: Ascii -> AsciiBuilder
 toAsciiBuilder (Ascii bs) = AsciiBuilder $ Blaze.fromByteString bs
