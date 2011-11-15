@@ -1,5 +1,5 @@
 Name:                ascii
-Version:             0.0.3
+Version:             0.0.4
 Synopsis:            Type-safe, bytestring-based ASCII values.
 Description:         Type-safe, bytestring-based ASCII values.
 License:             BSD3
