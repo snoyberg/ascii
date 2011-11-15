@@ -64,6 +64,7 @@ import qualified Data.ByteString.Char8 as S8
 import qualified Data.Char as C
 import Data.String (IsString (..))
 import Data.Data (Data)
+import Data.Hashable (Hashable)
 import Data.Typeable (Typeable)
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -73,7 +74,7 @@ import Data.Monoid (Monoid)
 import Data.CaseInsensitive (FoldCase, CI, mk, original)
 
 newtype Ascii = Ascii ByteString
-    deriving (Show, Eq, Read, Ord, Data, Typeable, IsString, FoldCase, Monoid)
+    deriving (Show, Eq, Read, Ord, Data, Typeable, IsString, FoldCase, Hashable, Monoid)
 
 type CIAscii = CI Ascii
 
